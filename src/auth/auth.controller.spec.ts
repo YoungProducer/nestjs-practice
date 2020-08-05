@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
 import { UsersService } from 'src/users/users.service';
+import { PasswordHasherService } from 'src/password-hasher/password-hasher.service';
 
 describe('Auth Controller', () => {
   let controller: AuthController;
@@ -10,7 +10,7 @@ describe('Auth Controller', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [AuthService, UsersService],
+      providers: [PasswordHasherService, UsersService],
     }).compile();
 
     controller = module.get<AuthController>(AuthController);
