@@ -1,8 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { AuthService } from './auth.service';
-import { PasswordHasherService } from 'src/password-hasher/password-hasher.service';
-import { UsersService } from 'src/users/users.service';
 import { UsersModule } from 'src/users/users.module';
 import { PasswordHasherModule } from 'src/password-hasher/password-hasher.module';
 

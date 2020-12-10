@@ -33,7 +33,7 @@ export class AuthService {
     async verifyCredentials(
         credentials: VerifyCredentials,
     ): Promise<UserProfile> {
-        const user = await this.usersService.findOne(credentials);
+        const user = await this.usersService.findOneByEmail(credentials.email);
 
         if (!user) {
             throw new NotFoundException(

@@ -5,6 +5,7 @@ import { UsersService } from './users.service';
 
 describe('Users Controller', () => {
     let controller: UsersController;
+    let service: UsersService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -13,6 +14,7 @@ describe('Users Controller', () => {
         }).compile();
 
         controller = module.get<UsersController>(UsersController);
+        service = module.get<UsersService>(UsersService);
     });
 
     it('should be defined', () => {

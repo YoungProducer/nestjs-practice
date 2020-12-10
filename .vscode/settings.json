@@ -22,4 +22,9 @@
   },
   "cSpell.language": "ru,en",
   "typescript.tsdk": "node_modules/typescript/lib",
+  "cSpell.words": [
+    "Hasher",
+    "signin",
+    "signup"
+  ],
 }
