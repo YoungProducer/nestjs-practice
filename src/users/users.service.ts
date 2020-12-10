@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { User } from './interfaces/user.interface';
-import { FindOne } from './interfaces/find-one.interface';
+import { FindOneData } from './interfaces/find-one.interface';
 
 @Injectable()
 export class UsersService {
@@ -15,11 +15,11 @@ export class UsersService {
         return this.users;
     }
 
-    async findOne(foundUser: FindOne): Promise<User | undefined> {
-        if (!foundUser.email && !foundUser.name) return undefined;
+    async findOne(data: FindOneData): Promise<User | undefined> {
+        if (!data.email && !data.name) return undefined;
 
         return this.users.find(user =>
-            user.email === foundUser.email ||
-            user.name === foundUser.name);
+            user.email === data.email ||
+            user.name === data.name);
     }
 }

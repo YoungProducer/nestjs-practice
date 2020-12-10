@@ -1,4 +1,4 @@
-export interface FindOne {
+export interface FindOneData {
     name?: string;
     email?: string;
 }
