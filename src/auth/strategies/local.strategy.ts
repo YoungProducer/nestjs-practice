@@ -11,7 +11,11 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
         super();
     }
 
-    async validate(email: string, name: string, password: string): Promise<UserProfile> {
+    async validate(
+        email: string,
+        name: string,
+        password: string,
+    ): Promise<UserProfile> {
         console.log('here');
         return await this.authService.verifyCredentials({
             name,

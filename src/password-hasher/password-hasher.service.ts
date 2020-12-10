@@ -1,9 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {
-    genSalt,
-    hash,
-    compare,
-} from 'bcryptjs';
+import { genSalt, hash, compare } from 'bcryptjs';
 
 import { ComparePasswordsPayload } from './interfaces/compare-passwords.interface';
 import { hasherContants } from './constants';

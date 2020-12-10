@@ -6,12 +6,8 @@ import { AuthModule } from './auth/auth.module';
 import { PasswordHasherModule } from './password-hasher/password-hasher.module';
 
 @Module({
-  imports: [
-    UsersModule,
-    AuthModule,
-    PasswordHasherModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [UsersModule, AuthModule, PasswordHasherModule],
+    controllers: [AppController],
+    providers: [AppService],
 })
 export class AppModule {}

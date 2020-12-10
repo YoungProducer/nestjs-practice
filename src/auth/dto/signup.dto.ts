@@ -1,8 +1,4 @@
-import {
-    IsNotEmpty,
-    IsEmail,
-    IsString,
-} from 'class-validator';
+import { IsNotEmpty, IsEmail, IsString } from 'class-validator';
 
 export class SignUpDto {
     @IsString()
@@ -10,7 +6,7 @@ export class SignUpDto {
         message: 'Name is missed in request body!',
     })
     name: string;
-    
+
     @IsString()
     @IsNotEmpty({
         message: 'Email is missed in request body!',

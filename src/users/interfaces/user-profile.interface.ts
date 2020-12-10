@@ -1,4 +1,3 @@
 import { User } from './user.interface';
 
-export type UserProfile =
-    Omit<User, 'password'>;
+export type UserProfile = Omit<User, 'password'>;
