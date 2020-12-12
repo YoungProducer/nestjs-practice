@@ -16,7 +16,6 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
         name: string,
         password: string,
     ): Promise<UserProfile> {
-        console.log('here');
         return await this.authService.verifyCredentials({
             name,
             email,

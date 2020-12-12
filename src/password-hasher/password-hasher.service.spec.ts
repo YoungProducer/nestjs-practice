@@ -26,10 +26,11 @@ describe('PasswordHasherService', () => {
 
     it('password should matches if provided password is correct', async () => {
         const initialPassword = '1234';
-        const hashedPassword = await service.hashPassword(initialPassword);
+        const [hash, salt] = await service.hashPassword(initialPassword);
         const isMatched = await service.comparePasswords({
             providedPass: '1234',
-            storedPass: hashedPassword,
+            storedPass: hash,
+            salt,
         });
 
         expect(isMatched).toBeTruthy();
@@ -37,10 +38,11 @@ describe('PasswordHasherService', () => {
 
     it(`password shouldn't mastches if provided password is incorrect`, async () => {
         const initialPassword = '1234';
-        const hashedPassword = await service.hashPassword(initialPassword);
+        const [hash, salt] = await service.hashPassword(initialPassword);
         const isMatched = await service.comparePasswords({
             providedPass: '12345',
-            storedPass: hashedPassword,
+            storedPass: hash,
+            salt,
         });
 
         expect(isMatched).toBeFalsy();

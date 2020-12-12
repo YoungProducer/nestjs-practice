@@ -9,7 +9,7 @@ import { UsersService } from 'src/users/users.service';
 import { SignUpCredentials } from './interfaces/signup-credentials.interface';
 import { VerifyCredentials } from './interfaces/verify-credentials.interface';
 import { UserProfile } from 'src/users/interfaces/user-profile.interface';
-import { UserEntity } from 'src/entities/user';
+import { UserEntity } from 'src/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -45,8 +45,9 @@ export class AuthService {
 
         const passwordMatches = await this.passwordHasherService.comparePasswords(
             {
-                providedPass: credentials.password + user.hash,
                 storedPass: user.hash,
+                providedPass: credentials.password,
+                salt: user.salt,
             },
         );
 
