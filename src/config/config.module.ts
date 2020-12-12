@@ -22,3 +22,17 @@ export class ConfigModule {
         };
     }
 }
+
+// @Module({
+//     providers: [
+//         ConfigService,
+//         {
+//             provide: CONFIG_OPTIONS,
+//             useValue: {
+//                 folder: './config',
+//             },
+//         },
+//     ],
+//     exports: [ConfigService],
+// })
+// export class ConfigModule {}
