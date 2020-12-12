@@ -4,8 +4,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PasswordHasherModule } from './password-hasher/password-hasher.module';
 import { PredefinedConfigModule } from './predefined/modules';
-import { MockedUsersModule } from './__mocks__/modules/users.module';
-import { MockedAuthModule } from './__mocks__/modules/auth.module';
+import { MockedUsersModule } from './__mocks__/modules/users.module.mock';
+import { MockedAuthModule } from './__mocks__/modules/auth.module.mock';
 
 describe('AppController', () => {
     let appController: AppController;

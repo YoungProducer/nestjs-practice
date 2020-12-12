@@ -5,7 +5,7 @@ import { AuthService } from './auth.service';
 import { PasswordHasherModule } from 'src/password-hasher/password-hasher.module';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './strategies/local.strategy';
-import { MockedUsersModule } from 'src/__mocks__/modules/users.module';
+import { MockedUsersModule } from 'src/__mocks__/modules/users.module.mock';
 
 describe('Auth Controller', () => {
     let controller: AuthController;
