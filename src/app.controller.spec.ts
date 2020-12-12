@@ -1,15 +1,23 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
+import { PasswordHasherModule } from './password-hasher/password-hasher.module';
+import { PredefinedConfigModule } from './predefined/modules';
+import { MockedUsersModule } from './__mocks__/modules/users.module';
+import { MockedAuthModule } from './__mocks__/modules/auth.module';
 
 describe('AppController', () => {
     let appController: AppController;
 
     beforeEach(async () => {
         const app: TestingModule = await Test.createTestingModule({
-            imports: [UsersModule, AuthModule],
+            imports: [
+                MockedUsersModule,
+                MockedAuthModule,
+                PasswordHasherModule,
+                PredefinedConfigModule,
+            ],
             controllers: [AppController],
             providers: [AppService],
         }).compile();

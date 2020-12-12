@@ -3,7 +3,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { PasswordHasherModule } from 'src/password-hasher/password-hasher.module';
-import { UsersModule } from 'src/users/users.module';
+import { PassportModule } from '@nestjs/passport';
+import { LocalStrategy } from './strategies/local.strategy';
+import { MockedUsersModule } from 'src/__mocks__/modules/users.module';
 
 describe('Auth Controller', () => {
     let controller: AuthController;
@@ -11,8 +13,8 @@ describe('Auth Controller', () => {
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             controllers: [AuthController],
-            imports: [PasswordHasherModule, UsersModule],
-            providers: [AuthService],
+            imports: [MockedUsersModule, PasswordHasherModule, PassportModule],
+            providers: [AuthService, LocalStrategy],
         }).compile();
 
         controller = module.get<AuthController>(AuthController);

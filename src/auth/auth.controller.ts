@@ -30,8 +30,6 @@ export class AuthController {
         @Request() req: Req,
         @Body() signInDto: SignInDto,
     ): Promise<UserProfile> {
-        console.log(req.user);
-
         const userProfile = await this.authService.verifyCredentials(signInDto);
 
         return userProfile;
