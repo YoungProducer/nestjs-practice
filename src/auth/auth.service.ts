@@ -9,6 +9,7 @@ import { UsersService } from 'src/users/users.service';
 import { SignUpCredentials } from './interfaces/signup-credentials.interface';
 import { VerifyCredentials } from './interfaces/verify-credentials.interface';
 import { UserProfile } from 'src/users/interfaces/user-profile.interface';
+import { UserEntity } from 'src/entities/user';
 
 @Injectable()
 export class AuthService {
@@ -18,13 +19,14 @@ export class AuthService {
     ) {}
 
     async signUp(credentials: SignUpCredentials): Promise<void> {
-        const password = await this.passwordHasherService.hashPassword(
+        const [hash, salt] = await this.passwordHasherService.hashPassword(
             credentials.password,
         );
 
-        const preparedCredentials: SignUpCredentials = {
+        const preparedCredentials: Omit<UserEntity, 'id'> = {
             ...credentials,
-            password,
+            hash,
+            salt,
         };
 
         await this.usersService.create(preparedCredentials);
@@ -37,22 +39,20 @@ export class AuthService {
 
         if (!user) {
             throw new NotFoundException(
-                'There are not registered users with this email or name!',
+                'There are not registered users with this email!',
             );
         }
 
         const passwordMatches = await this.passwordHasherService.comparePasswords(
             {
-                providedPass: credentials.password,
-                storedPass: user.password,
+                providedPass: credentials.password + user.hash,
+                storedPass: user.hash,
             },
         );
 
         if (!passwordMatches) {
             throw new UnauthorizedException('Invalid password!');
         }
-
-        delete user.password;
 
         return user;
     }

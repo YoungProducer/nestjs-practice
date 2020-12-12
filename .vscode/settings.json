@@ -24,7 +24,9 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "cSpell.words": [
     "Hasher",
+    "nestjs",
     "signin",
-    "signup"
+    "signup",
+    "typeorm"
   ],
 }

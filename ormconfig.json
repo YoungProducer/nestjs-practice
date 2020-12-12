@@ -1,0 +1,10 @@
+{
+  "type": "mysql",
+  "host": "localhost",
+  "port": 3306,
+  "username": "withouthands",
+  "password": "aezakmi",
+  "database": "nest-practice",
+  "entities": ["dist/**/*.entity{.ts,.js}"],
+  "synchronize": true
+}
