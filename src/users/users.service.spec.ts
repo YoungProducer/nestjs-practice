@@ -1,12 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { UserEntity } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 
+import { UserEntity } from 'src/entities/user.entity';
 import { UsersService } from './users.service';
 
 describe('UsersService', () => {
     let service: UsersService;
+    let repo: Repository<UserEntity>;
 
     beforeEach(async () => {
         const repositoryToken = getRepositoryToken(UserEntity);
@@ -22,6 +23,7 @@ describe('UsersService', () => {
         }).compile();
 
         service = module.get<UsersService>(UsersService);
+        repo = module.get<Repository<UserEntity>>(repositoryToken);
     });
 
     it('should be defined', () => {
@@ -34,6 +36,16 @@ describe('UsersService', () => {
             name: 'user-name',
             password: 'user-pass',
         };
+
+        const RETURN_VALUE = {
+            ...USER_DATA,
+            id: 1,
+            hash: 'hash',
+            salt: 'salt',
+        };
+
+        jest.spyOn(repo, 'create').mockReturnValueOnce(RETURN_VALUE);
+        jest.spyOn(repo, 'findOne').mockResolvedValue(RETURN_VALUE);
 
         await service.create(USER_DATA);
 
@@ -54,6 +66,16 @@ describe('UsersService', () => {
             name: 'user-name',
             password: 'user-pass',
         };
+
+        const RETURN_VALUE = {
+            ...USER_1_DATA,
+            id: 1,
+            hash: 'hash',
+            salt: 'salt',
+        };
+
+        jest.spyOn(repo, 'create').mockReturnValue(RETURN_VALUE);
+        jest.spyOn(repo, 'findOne').mockResolvedValue(RETURN_VALUE);
 
         const userToFind = await service.create(USER_1_DATA);
         await service.create(USER_2_DATA);
@@ -76,6 +98,16 @@ describe('UsersService', () => {
             password: 'user-pass',
         };
 
+        const RETURN_VALUE = {
+            ...USER_1_DATA,
+            id: 1,
+            hash: 'hash',
+            salt: 'salt',
+        };
+
+        jest.spyOn(repo, 'create').mockReturnValue(RETURN_VALUE);
+        jest.spyOn(repo, 'findOne').mockResolvedValueOnce(RETURN_VALUE);
+
         await service.create(USER_1_DATA);
         await service.create(USER_2_DATA);
 
@@ -96,6 +128,16 @@ describe('UsersService', () => {
             name: 'user-2-name',
             password: 'user-pass',
         };
+
+        const RETURN_VALUE = {
+            ...USER_2_DATA,
+            id: 1,
+            hash: 'hash',
+            salt: 'salt',
+        };
+
+        jest.spyOn(repo, 'create').mockReturnValue(RETURN_VALUE);
+        jest.spyOn(repo, 'findOne').mockResolvedValueOnce(RETURN_VALUE);
 
         await service.create(USER_1_DATA);
         await service.create(USER_2_DATA);
@@ -118,9 +160,32 @@ describe('UsersService', () => {
             password: 'user-pass',
         };
 
+        const FIND_ALL_RETURNED_VALUE = [
+            {
+                ...USER_1_DATA,
+                id: 1,
+                hash: 'hash',
+                salt: 'salt',
+            },
+            {
+                ...USER_2_DATA,
+                id: 1,
+                hash: 'hash',
+                salt: 'salt',
+            },
+        ];
+
+        jest.spyOn(repo, 'create').mockReturnValueOnce(
+            FIND_ALL_RETURNED_VALUE[0],
+        );
         await service.create(USER_1_DATA);
+
+        jest.spyOn(repo, 'create').mockReturnValueOnce(
+            FIND_ALL_RETURNED_VALUE[1],
+        );
         await service.create(USER_2_DATA);
 
+        jest.spyOn(repo, 'find').mockResolvedValueOnce(FIND_ALL_RETURNED_VALUE);
         const foundUsers = await service.findAll();
 
         expect(foundUsers).toHaveLength(2);
@@ -136,11 +201,40 @@ describe('UsersService', () => {
             password: 'user-pass',
         };
 
+        const RETURN_DATA = [
+            {
+                ...USER_1_DATA,
+                id: 1,
+                hash: 'hash',
+                salt: 'salt',
+            },
+            {
+                ...USER_1_DATA,
+                id: 2,
+                hash: 'hash',
+                salt: 'salt',
+            },
+            {
+                ...USER_1_DATA,
+                id: 3,
+                hash: 'hash',
+                salt: 'salt',
+            },
+            {
+                ...USER_1_DATA,
+                id: 4,
+                hash: 'hash',
+                salt: 'salt',
+            },
+        ];
+
+        jest.spyOn(repo, 'create').mockReturnValue(RETURN_DATA[0]);
         await service.create(USER_1_DATA);
         await service.create(USER_1_DATA);
         await service.create(USER_1_DATA);
         await service.create(USER_1_DATA);
 
+        jest.spyOn(repo, 'find').mockResolvedValueOnce(RETURN_DATA);
         const foundUsers = await service.findAll();
 
         expect(foundUsers).toHaveLength(4);

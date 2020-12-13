@@ -30,7 +30,7 @@ export class UsersService {
     }
 
     async findOne(id: number): Promise<UserEntity | undefined> {
-        return this.usersRepository.findOne({
+        return await this.usersRepository.findOne({
             where: {
                 id,
             },
@@ -38,7 +38,7 @@ export class UsersService {
     }
 
     async findOneByName(name: string): Promise<UserEntity | undefined> {
-        return this.usersRepository.findOne({
+        return await this.usersRepository.findOne({
             where: {
                 name,
             },
@@ -46,7 +46,7 @@ export class UsersService {
     }
 
     async findOneByEmail(email: string): Promise<UserEntity | undefined> {
-        return this.usersRepository.findOne({
+        return await this.usersRepository.findOne({
             where: {
                 email,
             },
