@@ -8,7 +8,6 @@ import { PasswordHasherService } from 'src/password-hasher/password-hasher.servi
 import { UsersService } from 'src/users/users.service';
 import { SignUpCredentials } from './interfaces/signup-credentials.interface';
 import { VerifyCredentials } from './interfaces/verify-credentials.interface';
-import { UserProfile } from 'src/users/interfaces/user-profile.interface';
 import { UserEntity } from 'src/entities/user.entity';
 
 @Injectable()
@@ -18,7 +17,7 @@ export class AuthService {
         private usersService: UsersService,
     ) {}
 
-    async signUp(credentials: SignUpCredentials): Promise<void> {
+    async signUp(credentials: SignUpCredentials): Promise<UserEntity> {
         const [hash, salt] = await this.passwordHasherService.hashPassword(
             credentials.password,
         );
@@ -29,12 +28,12 @@ export class AuthService {
             salt,
         };
 
-        await this.usersService.create(preparedCredentials);
+        return await this.usersService.create(preparedCredentials);
     }
 
     async verifyCredentials(
         credentials: VerifyCredentials,
-    ): Promise<UserProfile> {
+    ): Promise<UserEntity> {
         const user = await this.usersService.findOneByEmail(credentials.email);
 
         if (!user) {

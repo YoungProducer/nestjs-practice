@@ -22,6 +22,8 @@ export class UsersService {
             ...user,
         });
 
+        await this.usersRepository.save(newUser);
+
         return newUser;
     }
 

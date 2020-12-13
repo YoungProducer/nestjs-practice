@@ -17,6 +17,6 @@ export const getTypeOrmOptions = (
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         entities: [entitiesPath],
-        synchronize: process.env.NODE_ENV === 'development',
+        synchronize: configService.get('SYNC') === 'TRUE',
     };
 };

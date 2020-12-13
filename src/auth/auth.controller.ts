@@ -1,18 +1,11 @@
-import {
-    Controller,
-    Post,
-    Body,
-    HttpCode,
-    UseGuards,
-    Request,
-} from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, Request } from '@nestjs/common';
+import { plainToClass } from 'class-transformer';
 import { Request as Req } from 'express';
 
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/signup.dto';
 import { SignInDto } from './dto/signin.dto';
-import { UserProfile } from 'src/users/interfaces/user-profile.interface';
-import { LocalAuthGuard } from './guards/local-auth.guard';
+import { LoginResponseDto } from './dto';
 
 @Controller('auth')
 export class AuthController {
@@ -23,15 +16,14 @@ export class AuthController {
         await this.authService.signUp(signUpDto);
     }
 
-    @UseGuards(LocalAuthGuard)
     @Post('/signin')
     @HttpCode(200)
     async signin(
         @Request() req: Req,
         @Body() signInDto: SignInDto,
-    ): Promise<UserProfile> {
-        const userProfile = await this.authService.verifyCredentials(signInDto);
+    ): Promise<LoginResponseDto> {
+        const user = await this.authService.verifyCredentials(signInDto);
 
-        return userProfile;
+        return plainToClass(LoginResponseDto, { user });
     }
 }

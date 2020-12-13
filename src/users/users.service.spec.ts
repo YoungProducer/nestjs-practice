@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository, SaveOptions } from 'typeorm';
 
 import { UserEntity } from 'src/entities/user.entity';
 import { UsersService } from './users.service';
@@ -24,6 +24,12 @@ describe('UsersService', () => {
 
         service = module.get<UsersService>(UsersService);
         repo = module.get<Repository<UserEntity>>(repositoryToken);
+
+        jest.spyOn(repo, 'save').mockImplementation(
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            async (e: DeepPartial<UserEntity>, _o?: SaveOptions) =>
+                e as UserEntity,
+        );
     });
 
     it('should be defined', () => {
