@@ -25,6 +25,7 @@
   "cSpell.words": [
     "Hasher",
     "nestjs",
+    "pify",
     "signin",
     "signup",
     "typeorm"

@@ -6,4 +6,6 @@ export interface EnvConfig {
     DB_USERNAME: string;
     DB_PASSWORD: string;
     SYNC: string;
+    JWT_SECRET: string;
+    JWT_EXPIRES_IN: string;
 }
