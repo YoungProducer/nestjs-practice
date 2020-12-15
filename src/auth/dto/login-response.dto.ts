@@ -6,4 +6,7 @@ export class LoginResponseDto {
     @Expose()
     @Type(() => UserDto)
     user: UserDto;
+
+    @Expose()
+    accessToken: string;
 }

@@ -22,8 +22,15 @@ export class AuthController {
         @Request() req: Req,
         @Body() signInDto: SignInDto,
     ): Promise<LoginResponseDto> {
-        const user = await this.authService.verifyCredentials(signInDto);
+        const [accessToken, user] = await this.authService.verifyCredentials(
+            signInDto,
+        );
 
-        return plainToClass(LoginResponseDto, { user });
+        const preparedResponse: LoginResponseDto = {
+            user,
+            accessToken,
+        };
+
+        return plainToClass(LoginResponseDto, preparedResponse);
     }
 }

@@ -9,12 +9,14 @@ import { UsersService } from 'src/users/users.service';
 import { SignUpCredentials } from './interfaces/signup-credentials.interface';
 import { VerifyCredentials } from './interfaces/verify-credentials.interface';
 import { UserEntity } from 'src/entities/user.entity';
+import { JWTService } from 'src/tokens/jwt/jwt.service';
 
 @Injectable()
 export class AuthService {
     constructor(
         private passwordHasherService: PasswordHasherService,
         private usersService: UsersService,
+        private jwtService: JWTService,
     ) {}
 
     async signUp(credentials: SignUpCredentials): Promise<UserEntity> {
@@ -33,7 +35,7 @@ export class AuthService {
 
     async verifyCredentials(
         credentials: VerifyCredentials,
-    ): Promise<UserEntity> {
+    ): Promise<[string, UserEntity]> {
         const user = await this.usersService.findOneByEmail(credentials.email);
 
         if (!user) {
@@ -54,6 +56,8 @@ export class AuthService {
             throw new UnauthorizedException('Invalid password!');
         }
 
-        return user;
+        const token = await this.jwtService.sign(user);
+
+        return [token, user];
     }
 }

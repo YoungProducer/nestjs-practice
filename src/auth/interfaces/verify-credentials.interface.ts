@@ -1,5 +1,4 @@
 export interface VerifyCredentials {
-    email?: string;
-    name?: string;
+    email: string;
     password: string;
 }

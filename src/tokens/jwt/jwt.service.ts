@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { UserEntity } from 'src/entities/user.entity';
 import { ConfigService } from 'src/config/config.service';
@@ -8,10 +8,7 @@ import { UserDto } from 'src/users/dto/user.dto';
 
 @Injectable()
 export class JWTService {
-    constructor(
-        @Inject(ConfigService)
-        private configService: ConfigService,
-    ) {}
+    constructor(private configService: ConfigService) {}
 
     async sign(user: UserEntity): Promise<string> {
         const userDto = plainToClass(UserDto, user);

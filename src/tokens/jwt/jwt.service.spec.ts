@@ -3,6 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from 'src/config/config.service';
 import { UserEntity } from 'src/entities/user.entity';
 import { PredefinedConfigModule } from 'src/predefined/modules';
+import { getConfigValue } from 'src/__mocks__/getConfigValue.mock';
 import { JWTService } from './jwt.service';
 
 describe('JWTService', () => {
@@ -18,15 +19,7 @@ describe('JWTService', () => {
         service = module.get<JWTService>(JWTService);
         configService = module.get<ConfigService>(ConfigService);
 
-        jest.spyOn(configService, 'get').mockImplementation((name: string) => {
-            if (name === 'JWT_EXPIRES_IN') {
-                return '2min';
-            }
-
-            if (name === 'JWT_SECRET') {
-                return 'secret';
-            }
-        });
+        jest.spyOn(configService, 'get').mockImplementation(getConfigValue);
     });
 
     it('should be defined', () => {

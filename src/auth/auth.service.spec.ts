@@ -2,20 +2,24 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { MockedUsersModule } from 'src/__mocks__/modules/users.module.mock';
 import { UserEntity } from 'src/entities/user.entity';
 import { PasswordHasherModule } from 'src/password-hasher/password-hasher.module';
 import { PasswordHasherService } from 'src/password-hasher/password-hasher.service';
-import { MockedUsersModule } from 'src/__mocks__/modules/users.module.mock';
+import { TokensModule } from 'src/tokens/tokens.module';
+import { ConfigService } from 'src/config/config.service';
 import { AuthService } from './auth.service';
+import { getConfigValue } from 'src/__mocks__/getConfigValue.mock';
 
 describe('AuthService', () => {
     let service: AuthService;
     let hasherService: PasswordHasherService;
     let repo: Repository<UserEntity>;
+    let configService: ConfigService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            imports: [MockedUsersModule, PasswordHasherModule],
+            imports: [MockedUsersModule, PasswordHasherModule, TokensModule],
             providers: [AuthService],
         }).compile();
 
@@ -26,12 +30,16 @@ describe('AuthService', () => {
         repo = module.get<Repository<UserEntity>>(
             getRepositoryToken(UserEntity),
         );
+        configService = module.get<ConfigService>(ConfigService);
+
+        jest.spyOn(configService, 'get').mockImplementation(getConfigValue);
     });
 
     it('should be defined', () => {
         expect(service).toBeDefined();
         expect(hasherService).toBeDefined();
         expect(repo).toBeDefined();
+        expect(configService).toBeDefined();
     });
 
     it('should return user if all credential are valid', async () => {
@@ -50,11 +58,57 @@ describe('AuthService', () => {
 
         jest.spyOn(repo, 'findOne').mockResolvedValueOnce(user);
 
-        expect(
+        const result = await service.verifyCredentials({
+            password,
+            email,
+        });
+
+        expect(result).toHaveLength(2);
+        expect(typeof result[0]).toBe('string');
+        expect(result[0].startsWith('Bearer ')).toBeTruthy();
+        expect(result[1]).toEqual(user);
+    });
+
+    it('should throw error if email is incorrect', async () => {
+        const password = '1234';
+
+        jest.spyOn(repo, 'findOne').mockResolvedValueOnce(undefined);
+
+        try {
             await service.verifyCredentials({
                 password,
+                email: 'invalid',
+            });
+        } catch (e) {
+            expect(e.message).toBe(
+                'There are not registered users with this email!',
+            );
+        }
+    });
+
+    it('should throw error if password is incorrect', async () => {
+        const password = '1234';
+        const email = 'mock@gmail.com';
+
+        const [hash, salt] = await hasherService.hashPassword(password);
+
+        const user: UserEntity = {
+            id: 1,
+            email,
+            name: 'name',
+            hash,
+            salt,
+        };
+
+        jest.spyOn(repo, 'findOne').mockResolvedValueOnce(user);
+
+        try {
+            await service.verifyCredentials({
+                password: 'wrong pass',
                 email,
-            }),
-        ).toEqual(user);
+            });
+        } catch (e) {
+            expect(e.message).toBe('Invalid password!');
+        }
     });
 });

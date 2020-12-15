@@ -6,6 +6,7 @@ import { PasswordHasherModule } from './password-hasher/password-hasher.module';
 import { PredefinedConfigModule } from './predefined/modules';
 import { MockedUsersModule } from './__mocks__/modules/users.module.mock';
 import { MockedAuthModule } from './__mocks__/modules/auth.module.mock';
+import { TokensModule } from './tokens/tokens.module';
 
 describe('AppController', () => {
     let appController: AppController;
@@ -17,6 +18,7 @@ describe('AppController', () => {
                 MockedAuthModule,
                 PasswordHasherModule,
                 PredefinedConfigModule,
+                TokensModule,
             ],
             controllers: [AppController],
             providers: [AppService],

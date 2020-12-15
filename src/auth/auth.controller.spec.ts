@@ -6,6 +6,7 @@ import { PasswordHasherModule } from 'src/password-hasher/password-hasher.module
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './strategies/local.strategy';
 import { MockedUsersModule } from 'src/__mocks__/modules/users.module.mock';
+import { TokensModule } from 'src/tokens/tokens.module';
 
 describe('Auth Controller', () => {
     let controller: AuthController;
@@ -13,7 +14,12 @@ describe('Auth Controller', () => {
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             controllers: [AuthController],
-            imports: [MockedUsersModule, PasswordHasherModule, PassportModule],
+            imports: [
+                MockedUsersModule,
+                PasswordHasherModule,
+                PassportModule,
+                TokensModule,
+            ],
             providers: [AuthService, LocalStrategy],
         }).compile();
 

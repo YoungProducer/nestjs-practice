@@ -95,6 +95,7 @@ describe('AuthController (e2e)', () => {
                     name,
                     email,
                 }),
+                accessToken: expect.stringContaining('Bearer '),
             });
         });
 
