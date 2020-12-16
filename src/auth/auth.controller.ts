@@ -1,15 +1,20 @@
 import { Controller, Post, Body, HttpCode, Request } from '@nestjs/common';
-import { plainToClass } from 'class-transformer';
+import { classToPlain, plainToClass } from 'class-transformer';
 import { Request as Req } from 'express';
 
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/signup.dto';
 import { SignInDto } from './dto/signin.dto';
 import { LoginResponseDto } from './dto';
+import { TokensService } from 'src/tokens/tokens.service';
+import { UserDto } from 'src/users/dto/user.dto';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private authService: AuthService) {}
+    constructor(
+        private authService: AuthService,
+        private tokensService: TokensService,
+    ) {}
 
     @Post('/signup')
     async signup(@Body() signUpDto: SignUpDto): Promise<void> {
@@ -22,13 +27,19 @@ export class AuthController {
         @Request() req: Req,
         @Body() signInDto: SignInDto,
     ): Promise<LoginResponseDto> {
-        const [accessToken, user] = await this.authService.verifyCredentials(
-            signInDto,
+        const user = await this.authService.verifyCredentials(signInDto);
+
+        const [
+            accessToken,
+            refreshToken,
+        ] = await this.tokensService.issueTokensPair(
+            classToPlain(user) as UserDto,
         );
 
         const preparedResponse: LoginResponseDto = {
             user,
             accessToken,
+            refreshToken,
         };
 
         return plainToClass(LoginResponseDto, preparedResponse);

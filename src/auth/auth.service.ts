@@ -35,7 +35,7 @@ export class AuthService {
 
     async verifyCredentials(
         credentials: VerifyCredentials,
-    ): Promise<[string, UserEntity]> {
+    ): Promise<UserEntity> {
         const user = await this.usersService.findOneByEmail(credentials.email);
 
         if (!user) {
@@ -56,8 +56,6 @@ export class AuthService {
             throw new UnauthorizedException('Invalid password!');
         }
 
-        const token = await this.jwtService.sign(user);
-
-        return [token, user];
+        return user;
     }
 }

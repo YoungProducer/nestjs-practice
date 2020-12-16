@@ -30,6 +30,9 @@ export class UserEntity {
     @OneToMany(
         () => RefreshTokenEntity,
         token => token.user,
+        {
+            cascade: true,
+        },
     )
     refreshTokens: RefreshTokenEntity[];
 }

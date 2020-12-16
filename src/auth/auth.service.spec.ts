@@ -3,13 +3,13 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { MockedUsersModule } from 'src/__mocks__/modules/users.module.mock';
+import { getConfigValue } from 'src/__mocks__/getConfigValue.mock';
+import { MockedTokensModule } from 'src/__mocks__/modules/tokens.module.mock';
 import { UserEntity } from 'src/entities/user.entity';
 import { PasswordHasherModule } from 'src/password-hasher/password-hasher.module';
 import { PasswordHasherService } from 'src/password-hasher/password-hasher.service';
-import { TokensModule } from 'src/tokens/tokens.module';
 import { ConfigService } from 'src/config/config.service';
 import { AuthService } from './auth.service';
-import { getConfigValue } from 'src/__mocks__/getConfigValue.mock';
 
 describe('AuthService', () => {
     let service: AuthService;
@@ -19,7 +19,11 @@ describe('AuthService', () => {
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            imports: [MockedUsersModule, PasswordHasherModule, TokensModule],
+            imports: [
+                MockedUsersModule,
+                PasswordHasherModule,
+                MockedTokensModule,
+            ],
             providers: [AuthService],
         }).compile();
 
@@ -64,10 +68,7 @@ describe('AuthService', () => {
             email,
         });
 
-        expect(result).toHaveLength(2);
-        expect(typeof result[0]).toBe('string');
-        expect(result[0].startsWith('Bearer ')).toBeTruthy();
-        expect(result[1]).toEqual(user);
+        expect(result).toEqual(user);
     });
 
     it('should throw error if email is incorrect', async () => {
