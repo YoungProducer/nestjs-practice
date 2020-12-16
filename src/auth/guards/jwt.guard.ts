@@ -1,9 +1,4 @@
-import {
-    CanActivate,
-    Inject,
-    Injectable,
-    UnauthorizedException,
-} from '@nestjs/common';
+import { CanActivate, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ExecutionContext } from '@nestjs/common';
 import { Request as Req } from 'express';
 
@@ -11,7 +6,7 @@ import { JWTService } from 'src/tokens/jwt/jwt.service';
 
 @Injectable()
 export class JWTGuard implements CanActivate {
-    constructor(@Inject(JWTService) private jwtService: JWTService) {}
+    constructor(private jwtService: JWTService) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest<Req>();
