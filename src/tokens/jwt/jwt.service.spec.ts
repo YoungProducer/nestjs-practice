@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { ConfigService } from 'src/config/config.service';
-import { UserEntity } from 'src/entities/user.entity';
 import { PredefinedConfigModule } from 'src/predefined/modules';
+import { UserDto } from 'src/users/dto/user.dto';
 import { getConfigValue } from 'src/__mocks__/getConfigValue.mock';
 import { JWTService } from './jwt.service';
 
@@ -27,12 +27,10 @@ describe('JWTService', () => {
     });
 
     it('should return valid token', async () => {
-        const user: UserEntity = {
+        const user: UserDto = {
             email: 'email',
-            hash: 'hash',
             id: 1,
             name: 'name',
-            salt: 'salt',
         };
 
         const token = await service.sign(user);
@@ -42,12 +40,10 @@ describe('JWTService', () => {
     });
 
     it('should return user dto on verify', async () => {
-        const user: UserEntity = {
+        const user: UserDto = {
             email: 'email',
-            hash: 'hash',
             id: 1,
             name: 'name',
-            salt: 'salt',
         };
 
         const token = await service.sign(user);

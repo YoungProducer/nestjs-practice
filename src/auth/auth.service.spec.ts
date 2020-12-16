@@ -54,6 +54,7 @@ describe('AuthService', () => {
             name: 'name',
             hash,
             salt,
+            refreshTokens: [],
         };
 
         jest.spyOn(repo, 'findOne').mockResolvedValueOnce(user);
@@ -98,6 +99,7 @@ describe('AuthService', () => {
             name: 'name',
             hash,
             salt,
+            refreshTokens: [],
         };
 
         jest.spyOn(repo, 'findOne').mockResolvedValueOnce(user);

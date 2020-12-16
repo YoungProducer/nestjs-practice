@@ -24,7 +24,7 @@ export class AuthService {
             credentials.password,
         );
 
-        const preparedCredentials: Omit<UserEntity, 'id'> = {
+        const preparedCredentials: Omit<UserEntity, 'id' | 'refreshTokens'> = {
             ...credentials,
             hash,
             salt,

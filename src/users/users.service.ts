@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 
 import { UserEntity } from 'src/entities/user.entity';
 import { User } from './interfaces/user.interface';
+import { CreateUserData } from './interfaces/create-data.interface';
 
 @Injectable()
 export class UsersService {
@@ -15,9 +16,7 @@ export class UsersService {
         private usersRepository: Repository<UserEntity>,
     ) {}
 
-    async create(
-        user: Omit<UserEntity, 'id' | 'hash' | 'salt'>,
-    ): Promise<UserEntity> {
+    async create(user: CreateUserData): Promise<UserEntity> {
         const newUser = this.usersRepository.create({
             ...user,
         });

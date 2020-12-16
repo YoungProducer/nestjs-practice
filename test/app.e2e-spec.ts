@@ -1,9 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from './../src/app.module';
+
 import { JWTService } from 'src/tokens/jwt/jwt.service';
-import { UserEntity } from 'src/entities/user.entity';
+import { UserDto } from 'src/users/dto/user.dto';
+import { AppModule } from './../src/app.module';
 
 describe('AppController (e2e)', () => {
     let app: INestApplication;
@@ -27,12 +28,10 @@ describe('AppController (e2e)', () => {
     });
 
     it('/me (GET)', async () => {
-        const user: UserEntity = {
+        const user: UserDto = {
             email: 'user@gmail.com',
             name: 'user',
             id: 1,
-            hash: 'hash',
-            salt: 'salt',
         };
 
         const token = await jwtService.sign(user);

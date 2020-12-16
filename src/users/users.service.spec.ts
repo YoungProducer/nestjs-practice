@@ -48,6 +48,7 @@ describe('UsersService', () => {
             id: 1,
             hash: 'hash',
             salt: 'salt',
+            refreshTokens: [],
         };
 
         jest.spyOn(repo, 'create').mockReturnValueOnce(RETURN_VALUE);
@@ -78,6 +79,7 @@ describe('UsersService', () => {
             id: 1,
             hash: 'hash',
             salt: 'salt',
+            refreshTokens: [],
         };
 
         jest.spyOn(repo, 'create').mockReturnValue(RETURN_VALUE);
@@ -109,6 +111,7 @@ describe('UsersService', () => {
             id: 1,
             hash: 'hash',
             salt: 'salt',
+            refreshTokens: [],
         };
 
         jest.spyOn(repo, 'create').mockReturnValue(RETURN_VALUE);
@@ -140,6 +143,7 @@ describe('UsersService', () => {
             id: 1,
             hash: 'hash',
             salt: 'salt',
+            refreshTokens: [],
         };
 
         jest.spyOn(repo, 'create').mockReturnValue(RETURN_VALUE);
@@ -172,12 +176,14 @@ describe('UsersService', () => {
                 id: 1,
                 hash: 'hash',
                 salt: 'salt',
+                refreshTokens: [],
             },
             {
                 ...USER_2_DATA,
                 id: 1,
                 hash: 'hash',
                 salt: 'salt',
+                refreshTokens: [],
             },
         ];
 
@@ -213,24 +219,28 @@ describe('UsersService', () => {
                 id: 1,
                 hash: 'hash',
                 salt: 'salt',
+                refreshTokens: [],
             },
             {
                 ...USER_1_DATA,
                 id: 2,
                 hash: 'hash',
                 salt: 'salt',
+                refreshTokens: [],
             },
             {
                 ...USER_1_DATA,
                 id: 3,
                 hash: 'hash',
                 salt: 'salt',
+                refreshTokens: [],
             },
             {
                 ...USER_1_DATA,
                 id: 4,
                 hash: 'hash',
                 salt: 'salt',
+                refreshTokens: [],
             },
         ];
 

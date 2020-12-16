@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { RefreshTokenEntity } from './refres-token.entity';
 
 @Entity('users')
 export class UserEntity {
@@ -25,4 +26,10 @@ export class UserEntity {
         nullable: false,
     })
     salt!: string;
+
+    @OneToMany(
+        () => RefreshTokenEntity,
+        token => token.user,
+    )
+    refreshTokens: RefreshTokenEntity[];
 }
