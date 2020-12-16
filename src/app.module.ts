@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigService } from './config/config.service';
 import { PasswordHasherModule } from './password-hasher/password-hasher.module';
 import { PredefinedConfigModule } from './predefined/modules';
+import { JWTModule } from './tokens/jwt/jwt.module';
 
 @Module({
     imports: [
@@ -16,6 +17,7 @@ import { PredefinedConfigModule } from './predefined/modules';
         AuthModule,
         PasswordHasherModule,
         PredefinedConfigModule,
+        JWTModule,
         TypeOrmModule.forRootAsync({
             imports: [PredefinedConfigModule],
             useFactory: getTypeOrmOptions,
