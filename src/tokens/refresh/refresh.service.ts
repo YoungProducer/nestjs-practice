@@ -3,9 +3,10 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { RefreshTokenEntity } from 'src/entities/refres-token.entity';
+import { RefreshTokenEntity } from 'src/entities/refresh-token.entity';
 import { UserEntity } from 'src/entities/user.entity';
 import { b64DecodeUnicode, b64EncodeUnicode } from 'src/utils';
+import { RefreshTokenCreateOutputInterface } from './interfaces/refres-token-create-output.interface';
 
 @Injectable()
 export class RefreshService {
@@ -16,7 +17,7 @@ export class RefreshService {
         private usersRepository: Repository<UserEntity>,
     ) {}
 
-    async create(userId: number): Promise<string> {
+    async create(userId: number): Promise<RefreshTokenCreateOutputInterface> {
         const core = randomStringGenerator();
 
         const user = await this.usersRepository.findOne(userId, {
@@ -28,19 +29,21 @@ export class RefreshService {
         }
 
         const entity = this.refreshTokensRepository.create({
-            user,
             token: core,
         });
 
-        user.refreshTokens = [...user.refreshTokens, entity];
+        entity.user = Promise.resolve(user);
 
-        await this.usersRepository.save(user);
+        await this.refreshTokensRepository.save(entity);
 
         const id = entity.id;
 
         const token = `${core}.${b64EncodeUnicode(id)}`;
 
-        return token;
+        return {
+            dbTokenValue: core,
+            tokenForRespond: token,
+        };
     }
 
     /**
@@ -53,11 +56,17 @@ export class RefreshService {
             throw new UnauthorizedException('Invalid token type!');
         }
 
-        const [, b64Id] = parts;
+        const [core, b64Id] = parts;
 
         const id = b64DecodeUnicode(b64Id);
 
-        if (!this.refreshTokensRepository.findOne(id)) {
+        const tokenEntity = await this.refreshTokensRepository.findOne(id);
+
+        if (!tokenEntity) {
+            throw new UnauthorizedException('Token is invalid!');
+        }
+
+        if (tokenEntity.token !== core) {
             throw new UnauthorizedException('Token is invalid!');
         }
 

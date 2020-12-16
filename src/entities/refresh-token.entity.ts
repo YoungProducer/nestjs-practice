@@ -13,5 +13,5 @@ export class RefreshTokenEntity {
         () => UserEntity,
         user => user.refreshTokens,
     )
-    user: UserEntity;
+    user: Promise<UserEntity>;
 }

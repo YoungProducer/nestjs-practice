@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { RefreshTokenEntity } from './refres-token.entity';
+import { RefreshTokenEntity } from './refresh-token.entity';
 
 @Entity('users')
 export class UserEntity {
@@ -34,5 +34,5 @@ export class UserEntity {
             cascade: true,
         },
     )
-    refreshTokens: RefreshTokenEntity[];
+    refreshTokens: Promise<RefreshTokenEntity[]>;
 }
