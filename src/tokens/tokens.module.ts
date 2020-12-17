@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RefreshTokenEntity } from 'src/entities/refresh-token.entity';
 import { JWTModule } from './jwt/jwt.module';
 import { RefreshModule } from './refresh/refresh.module';
-import { TokensController } from './tokens.contoller';
+import { TokensController } from './tokens.controller';
 import { TokensService } from './tokens.service';
 
 @Module({
