@@ -19,20 +19,13 @@ export class TokensService {
 
     async issueTokensPair(user: UserDto): Promise<[string, string]> {
         const accessToken = await this.jwtService.sign(user);
-        const { tokenForRespond } = await this.refreshService.create(user.id);
+        const refreshToken = await this.refreshService.create(user.id);
 
-        return [accessToken, tokenForRespond];
+        return [accessToken, refreshToken];
     }
 
     async refresh(token: string): Promise<[string, string]> {
-        const tokenId = await this.refreshService.validate(token);
-
-        const tokenEntity = await this.refreshTokensRepository.findOne(
-            tokenId,
-            {
-                relations: ['user'],
-            },
-        );
+        const tokenEntity = await this.refreshService.validate(token);
 
         const user = await Promise.resolve(tokenEntity.user);
 
