@@ -1,18 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfirmationTokenEntity } from 'src/entities/confirmation-token.entity';
 
 import { UserEntity } from 'src/entities/user.entity';
-import { PredefinedConfigModule } from 'src/predefined/modules/config.module';
-import { TokensModule } from 'src/tokens/tokens.module';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([UserEntity]),
-        PredefinedConfigModule,
-        TokensModule,
-    ],
+    imports: [TypeOrmModule.forFeature([UserEntity, ConfirmationTokenEntity])],
     controllers: [UsersController],
     providers: [UsersService],
     exports: [UsersService],

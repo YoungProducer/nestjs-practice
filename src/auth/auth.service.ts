@@ -4,6 +4,7 @@ import {
     UnauthorizedException,
 } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 
 import { PasswordHasherService } from 'src/password-hasher/password-hasher.service';
 import { UsersService } from 'src/users/users.service';
@@ -12,6 +13,10 @@ import { VerifyCredentials } from './interfaces/verify-credentials.interface';
 import { UserEntity } from 'src/entities/user.entity';
 import { JWTService } from 'src/tokens/jwt/jwt.service';
 import { ConfigService } from 'src/config/config.service';
+import { CreateUserData } from 'src/users/interfaces';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ConfirmationTokenEntity } from 'src/entities/confirmation-token.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
@@ -25,6 +30,11 @@ export class AuthService {
         private usersService: UsersService,
 
         private mailerService: MailerService,
+
+        @InjectRepository(ConfirmationTokenEntity)
+        private confirmationTokensRepository: Repository<
+            ConfirmationTokenEntity
+        >,
     ) {}
 
     async signUp(credentials: SignUpCredentials): Promise<UserEntity> {
@@ -32,10 +42,7 @@ export class AuthService {
             credentials.password,
         );
 
-        const preparedCredentials: Omit<
-            UserEntity,
-            'id' | 'refreshTokens' | 'verified'
-        > = {
+        const preparedCredentials: CreateUserData = {
             ...credentials,
             hash,
             salt,
@@ -43,15 +50,20 @@ export class AuthService {
 
         const user = await this.usersService.create(preparedCredentials);
 
-        const confirmationToken = await this.jwtService.sign(
+        const confirmationToken: string = randomStringGenerator();
+
+        const confirmationTokenEntity = this.confirmationTokensRepository.create(
             {
-                email: user.email,
-            },
-            {
-                secret: this.configService.get('VERIFY_SECRET'),
-                expiresIn: this.configService.get('VERIFY_EXPIRES_IN'),
+                token: confirmationToken,
+                expirationDate: (Date.now() + 60 * 60 * 1000).toString(),
             },
         );
+
+        confirmationTokenEntity.user = Promise.resolve(user);
+
+        await this.confirmationTokensRepository.save(confirmationTokenEntity);
+
+        console.log(confirmationTokenEntity);
 
         await this.mailerService.sendMail({
             to: 'sashabezrukovownmail@gmail.com',

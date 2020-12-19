@@ -3,21 +3,20 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { UserEntity } from 'src/entities/user.entity';
+import { ConfirmationTokenEntity } from 'src/entities/confirmation-token.entity';
 import { CreateUserData } from './interfaces/create-data.interface';
 import { VerifyDto } from './dto';
-import { JWTService } from 'src/tokens/jwt/jwt.service';
-import { ConfigService } from 'src/config/config.service';
-import { JWTServiceVerifyResponseInterface } from './interfaces';
 
 @Injectable()
 export class UsersService {
     constructor(
-        private configService: ConfigService,
-
-        private jwtService: JWTService,
-
         @InjectRepository(UserEntity)
         private usersRepository: Repository<UserEntity>,
+
+        @InjectRepository(ConfirmationTokenEntity)
+        private confirmationTokensRepository: Repository<
+            ConfirmationTokenEntity
+        >,
     ) {}
 
     async create(user: CreateUserData): Promise<UserEntity> {
@@ -31,11 +30,18 @@ export class UsersService {
     }
 
     async verify({ token }: VerifyDto): Promise<void> {
-        const { email } = await this.jwtService.verify<
-            JWTServiceVerifyResponseInterface
-        >(token, this.configService.get('VERIFY_SECRET'));
+        const tokenEntity = await this.confirmationTokensRepository.findOne({
+            where: {
+                token,
+            },
+            relations: ['user'],
+        });
 
-        const user = await this.findOneByEmail(email);
+        if (!token) {
+            throw new NotFoundException('Token is invalid!');
+        }
+
+        const user = await tokenEntity.user;
 
         if (!user) {
             throw new NotFoundException(
@@ -45,6 +51,7 @@ export class UsersService {
 
         user.verified = true;
 
+        await this.confirmationTokensRepository.remove(tokenEntity);
         await this.usersRepository.save(user);
     }
 

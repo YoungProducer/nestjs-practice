@@ -9,6 +9,8 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { TokensModule } from 'src/tokens/tokens.module';
 import { PredefinedMailerModule } from 'src/predefined/modules/mailer.module';
 import { PredefinedConfigModule } from 'src/predefined/modules/config.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfirmationTokenEntity } from 'src/entities/confirmation-token.entity';
 
 @Module({
     imports: [
@@ -18,6 +20,7 @@ import { PredefinedConfigModule } from 'src/predefined/modules/config.module';
         TokensModule,
         PredefinedMailerModule,
         PredefinedConfigModule,
+        TypeOrmModule.forFeature([ConfirmationTokenEntity]),
     ],
     controllers: [AuthController],
     providers: [AuthService, LocalStrategy],

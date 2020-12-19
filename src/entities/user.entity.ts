@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { ConfirmationTokenEntity } from './confirmation-token.entity';
 import { RefreshTokenEntity } from './refresh-token.entity';
 
 @Entity('users')
@@ -41,4 +42,13 @@ export class UserEntity {
         },
     )
     refreshTokens: Promise<RefreshTokenEntity[]>;
+
+    @OneToMany(
+        () => ConfirmationTokenEntity,
+        token => token.user,
+        {
+            cascade: true,
+        },
+    )
+    confirmationTokens: Promise<ConfirmationTokenEntity[]>;
 }

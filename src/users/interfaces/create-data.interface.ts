@@ -1,3 +1,5 @@
-import { UserDto } from '../dto/user.dto';
+import { UserEntity } from 'src/entities/user.entity';
 
-export type CreateUserData = Omit<UserDto, 'id'>;
+export type CreateUserData = Partial<
+    Omit<UserEntity, 'id' | 'refreshTokens' | 'confirmationTokens' | 'verified'>
+>;

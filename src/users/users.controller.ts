@@ -4,7 +4,6 @@ import { UsersService } from './users.service';
 import { UserDto } from './dto/user.dto';
 import { UserEntity } from 'src/entities/user.entity';
 import { SignUpDto } from 'src/auth/dto/signup.dto';
-import { VerifyDto } from './dto';
 
 @Controller('users')
 export class UsersController {
@@ -15,9 +14,9 @@ export class UsersController {
         return await this.userService.create(createUserData);
     }
 
-    @Post('/verify')
-    async verifyEmail(@Body() verifyData: VerifyDto): Promise<void> {
-        await this.userService.verify(verifyData);
+    @Post('/verify/:token')
+    async verifyEmail(@Param('token') token: string): Promise<void> {
+        await this.userService.verify({ token });
     }
 
     @Get(':id')
