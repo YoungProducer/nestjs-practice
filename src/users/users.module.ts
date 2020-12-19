@@ -2,11 +2,17 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { UserEntity } from 'src/entities/user.entity';
+import { PredefinedConfigModule } from 'src/predefined/modules/config.module';
+import { TokensModule } from 'src/tokens/tokens.module';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([UserEntity])],
+    imports: [
+        TypeOrmModule.forFeature([UserEntity]),
+        PredefinedConfigModule,
+        TokensModule,
+    ],
     controllers: [UsersController],
     providers: [UsersService],
     exports: [UsersService],

@@ -1,12 +1,19 @@
 import { CanActivate, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ExecutionContext } from '@nestjs/common';
+import { classToPlain, plainToClass } from 'class-transformer';
 import { Request as Req } from 'express';
 
+import { ConfigService } from 'src/config/config.service';
 import { JWTService } from 'src/tokens/jwt/jwt.service';
+import { UserDto } from 'src/users/dto/user.dto';
 
 @Injectable()
 export class JWTGuard implements CanActivate {
-    constructor(private jwtService: JWTService) {}
+    constructor(
+        private jwtService: JWTService,
+
+        private configService: ConfigService,
+    ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest<Req>();
@@ -39,10 +46,15 @@ export class JWTGuard implements CanActivate {
     async validate(req: Req): Promise<boolean> {
         const token = await this.extractToken(req);
 
-        const userDto = await this.jwtService.verify(token);
+        const data = await this.jwtService.verify(
+            token,
+            this.configService.get('JWT_SECRET'),
+        );
 
-        req.user = userDto;
+        const user = classToPlain(plainToClass(UserDto, data));
 
-        return !!userDto;
+        req.user = user;
+
+        return !!data;
     }
 }

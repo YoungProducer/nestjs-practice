@@ -27,6 +27,12 @@ export class UserEntity {
     })
     salt!: string;
 
+    @Column({
+        type: 'boolean',
+        default: false,
+    })
+    verified!: boolean;
+
     @OneToMany(
         () => RefreshTokenEntity,
         token => token.user,

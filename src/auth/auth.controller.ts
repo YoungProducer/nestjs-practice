@@ -1,6 +1,5 @@
-import { Controller, Post, Body, HttpCode, Request } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode } from '@nestjs/common';
 import { classToPlain, plainToClass } from 'class-transformer';
-import { Request as Req } from 'express';
 
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/signup.dto';
@@ -23,10 +22,7 @@ export class AuthController {
 
     @Post('/signin')
     @HttpCode(200)
-    async signin(
-        @Request() req: Req,
-        @Body() signInDto: SignInDto,
-    ): Promise<LoginResponseDto> {
+    async signin(@Body() signInDto: SignInDto): Promise<LoginResponseDto> {
         const user = await this.authService.verifyCredentials(signInDto);
 
         const [

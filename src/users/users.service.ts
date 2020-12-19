@@ -1,17 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { UserEntity } from 'src/entities/user.entity';
-import { User } from './interfaces/user.interface';
 import { CreateUserData } from './interfaces/create-data.interface';
+import { VerifyDto } from './dto';
+import { JWTService } from 'src/tokens/jwt/jwt.service';
+import { ConfigService } from 'src/config/config.service';
+import { JWTServiceVerifyResponseInterface } from './interfaces';
 
 @Injectable()
 export class UsersService {
-    private newId = 0;
-    private readonly users: User[] = [];
-
     constructor(
+        private configService: ConfigService,
+
+        private jwtService: JWTService,
+
         @InjectRepository(UserEntity)
         private usersRepository: Repository<UserEntity>,
     ) {}
@@ -24,6 +28,24 @@ export class UsersService {
         await this.usersRepository.save(newUser);
 
         return newUser;
+    }
+
+    async verify({ token }: VerifyDto): Promise<void> {
+        const { email } = await this.jwtService.verify<
+            JWTServiceVerifyResponseInterface
+        >(token, this.configService.get('VERIFY_SECRET'));
+
+        const user = await this.findOneByEmail(email);
+
+        if (!user) {
+            throw new NotFoundException(
+                'User with this email is not registered!',
+            );
+        }
+
+        user.verified = true;
+
+        await this.usersRepository.save(user);
     }
 
     async findAll(): Promise<UserEntity[]> {

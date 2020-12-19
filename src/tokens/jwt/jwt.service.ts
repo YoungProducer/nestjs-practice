@@ -1,29 +1,26 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { Injectable } from '@nestjs/common';
 
-import { ConfigService } from 'src/config/config.service';
-import { sign, verify } from './helpers';
-import { classToPlain, plainToClass } from 'class-transformer';
 import { UserDto } from 'src/users/dto/user.dto';
+import { sign, verify } from './helpers';
+import { SignOptions } from './interfaces';
 
 @Injectable()
 export class JWTService {
-    constructor(private configService: ConfigService) {}
-
-    async sign(user: UserDto): Promise<string> {
-        const secret = this.configService.get('JWT_SECRET');
-        const expiresIn = this.configService.get('JWT_EXPIRES_IN');
-
-        const token = await sign(user, secret, {
+    async sign<T extends string | object | Buffer = UserDto>(
+        data: T,
+        { expiresIn, secret }: SignOptions,
+    ): Promise<string> {
+        const token = await sign(data, secret, {
             expiresIn,
         });
 
-        return `Bearer ${token}`;
+        return token;
     }
 
-    async verify(token: string): Promise<UserDto> {
-        const secret = this.configService.get('JWT_SECRET');
-        const data = await verify(token, secret);
+    async verify<T = UserDto>(token: string, secret: string): Promise<T> {
+        const data = await verify<T>(token, secret);
 
-        return classToPlain(plainToClass(UserDto, data)) as UserDto;
+        return data;
     }
 }

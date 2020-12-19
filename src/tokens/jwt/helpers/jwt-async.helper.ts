@@ -6,4 +6,4 @@ import { SignType, VerifyType } from '../interfaces';
 const pify = require('pify');
 
 export const sign = pify(signSync) as SignType;
-export const verify = pify(verifySync) as VerifyType;
+export const verify: VerifyType = pify(verifySync);

@@ -8,8 +8,9 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigService } from './config/config.service';
 import { PasswordHasherModule } from './password-hasher/password-hasher.module';
-import { PredefinedConfigModule } from './predefined/modules';
 import { TokensModule } from './tokens/tokens.module';
+import { PredefinedConfigModule } from './predefined/modules/config.module';
+import { PredefinedMailerModule } from './predefined/modules/mailer.module';
 
 @Module({
     imports: [
@@ -17,6 +18,7 @@ import { TokensModule } from './tokens/tokens.module';
         AuthModule,
         PasswordHasherModule,
         PredefinedConfigModule,
+        PredefinedMailerModule,
         TokensModule,
         TypeOrmModule.forRootAsync({
             imports: [PredefinedConfigModule],

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { ConfigService } from 'src/config/config.service';
-import { PredefinedConfigModule } from 'src/predefined/modules';
+import { PredefinedConfigModule } from 'src/predefined/modules/config.module';
 import { UserDto } from 'src/users/dto/user.dto';
 import { getConfigValue } from 'src/__mocks__/getConfigValue.mock';
 import { JWTService } from './jwt.service';
