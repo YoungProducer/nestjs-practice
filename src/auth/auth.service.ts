@@ -63,8 +63,6 @@ export class AuthService {
 
         await this.confirmationTokensRepository.save(confirmationTokenEntity);
 
-        console.log(confirmationTokenEntity);
-
         await this.mailerService.sendMail({
             to: 'sashabezrukovownmail@gmail.com',
             template: 'complete-registration',

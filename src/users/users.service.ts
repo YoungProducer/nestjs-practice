@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+    BadRequestException,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -47,6 +51,10 @@ export class UsersService {
             throw new NotFoundException(
                 'User with this email is not registered!',
             );
+        }
+
+        if (+Date.now() > +tokenEntity.expirationDate) {
+            throw new BadRequestException('Token is out of date!');
         }
 
         user.verified = true;
