@@ -1,10 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { PassportModule } from '@nestjs/passport';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { PasswordHasherModule } from 'src/password-hasher/password-hasher.module';
-import { PassportModule } from '@nestjs/passport';
-import { LocalStrategy } from './strategies/local.strategy';
 import { MockedUsersModule } from 'src/__mocks__/modules/users.module.mock';
 import { TokensModule } from 'src/tokens/tokens.module';
 
@@ -20,7 +19,7 @@ describe('Auth Controller', () => {
                 PassportModule,
                 TokensModule,
             ],
-            providers: [AuthService, LocalStrategy],
+            providers: [AuthService],
         }).compile();
 
         controller = module.get<AuthController>(AuthController);

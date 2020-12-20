@@ -4,27 +4,21 @@ import {
     UnauthorizedException,
 } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+import { InjectRepository } from '@nestjs/typeorm';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
+import { Repository } from 'typeorm';
 
 import { PasswordHasherService } from 'src/password-hasher/password-hasher.service';
 import { UsersService } from 'src/users/users.service';
+import { UserEntity } from 'src/entities/user.entity';
+import { ConfirmationTokenEntity } from 'src/entities/confirmation-token.entity';
+import { CreateUserData } from 'src/users/interfaces';
 import { SignUpCredentials } from './interfaces/signup-credentials.interface';
 import { VerifyCredentials } from './interfaces/verify-credentials.interface';
-import { UserEntity } from 'src/entities/user.entity';
-import { JWTService } from 'src/tokens/jwt/jwt.service';
-import { ConfigService } from 'src/config/config.service';
-import { CreateUserData } from 'src/users/interfaces';
-import { InjectRepository } from '@nestjs/typeorm';
-import { ConfirmationTokenEntity } from 'src/entities/confirmation-token.entity';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
     constructor(
-        private jwtService: JWTService,
-
-        private configService: ConfigService,
-
         private passwordHasherService: PasswordHasherService,
 
         private usersService: UsersService,

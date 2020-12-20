@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 
 import { JWTService } from 'src/tokens/jwt/jwt.service';
-import { UserDto } from 'src/users/dto/user.dto';
+import { UserDto } from 'src/users/dto';
 import { AppModule } from './../src/app.module';
 
 describe('AppController (e2e)', () => {

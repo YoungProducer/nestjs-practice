@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { Injectable } from '@nestjs/common';
 
-import { UserDto } from 'src/users/dto/user.dto';
+import { UserDto } from 'src/users/dto';
 import { sign, verify } from './helpers';
 import { SignOptions } from './interfaces';
 

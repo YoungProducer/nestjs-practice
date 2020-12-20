@@ -4,10 +4,10 @@ import { Repository } from 'typeorm';
 import { classToPlain } from 'class-transformer';
 
 import { RefreshTokenEntity } from 'src/entities/refresh-token.entity';
-import { UserDto } from 'src/users/dto/user.dto';
+import { UserDto } from 'src/users/dto';
+import { ConfigService } from 'src/config/config.service';
 import { JWTService } from './jwt/jwt.service';
 import { RefreshService } from './refresh/refresh.service';
-import { ConfigService } from 'src/config/config.service';
 import { SignOptions } from './jwt/interfaces';
 
 @Injectable()

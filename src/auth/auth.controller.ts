@@ -1,12 +1,12 @@
 import { Controller, Post, Body, HttpCode } from '@nestjs/common';
 import { classToPlain, plainToClass } from 'class-transformer';
 
-import { AuthService } from './auth.service';
-import { SignUpDto } from './dto/signup.dto';
-import { SignInDto } from './dto/signin.dto';
-import { LoginResponseDto } from './dto';
 import { TokensService } from 'src/tokens/tokens.service';
-import { UserDto } from 'src/users/dto/user.dto';
+import { UserDto } from 'src/users/dto';
+import { AuthService } from './auth.service';
+import { SignUpDto } from './dto';
+import { SignInDto } from './dto';
+import { LoginResponseDto } from './dto';
 
 @Controller('auth')
 export class AuthController {

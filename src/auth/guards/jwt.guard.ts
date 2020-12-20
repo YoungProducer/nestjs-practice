@@ -5,7 +5,7 @@ import { Request as Req } from 'express';
 
 import { ConfigService } from 'src/config/config.service';
 import { JWTService } from 'src/tokens/jwt/jwt.service';
-import { UserDto } from 'src/users/dto/user.dto';
+import { UserDto } from 'src/users/dto';
 
 @Injectable()
 export class JWTGuard implements CanActivate {
