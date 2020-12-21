@@ -1,3 +1,4 @@
-export const hasherConstants = {
-    rounds: 10,
-};
+    export const hasherConstants = {
+        rounds: 10,
+    };
+
