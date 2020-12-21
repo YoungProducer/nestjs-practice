@@ -24,9 +24,9 @@ export class UsersService {
     ) {}
 
     async create(user: CreateUserData): Promise<UserEntity> {
-        const newUser = this.usersRepository.create({
-            ...user,
-        });
+            const newUser = this.usersRepository.create({
+                ...user,
+            });
 
         await this.usersRepository.save(newUser);
 
@@ -53,9 +53,9 @@ export class UsersService {
             );
         }
 
-        if (+Date.now() > +tokenEntity.expirationDate) {
-            throw new BadRequestException('Token is out of date!');
-        }
+            if (+Date.now() > +tokenEntity.expirationDate) {
+                throw new BadRequestException('Token is out of date!');
+            }
 
         user.verified = true;
 
