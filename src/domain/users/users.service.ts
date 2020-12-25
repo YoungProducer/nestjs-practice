@@ -53,7 +53,7 @@ export class UsersService {
             );
         }
 
-        if (+Date.now() > +tokenEntity.expirationDate) {
+        if (Number(Date.now()) > Number(tokenEntity.expirationDate)) {
             throw new BadRequestException('Token is out of date!');
         }
 
