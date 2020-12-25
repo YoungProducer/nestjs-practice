@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import * as request from 'supertest';
 
 import { AppModule } from 'src/app.module';
-import { UserEntity } from 'src/entities/user.entity';
+import { UserEntity } from 'src/domain/tokens/refresh/node_modules/src/domain/auth/node_modules/src/entities/user.entity';
 
 describe('AuthController (e2e)', () => {
     let app: INestApplication;

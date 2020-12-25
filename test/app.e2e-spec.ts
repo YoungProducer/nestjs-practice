@@ -2,8 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 
-import { JWTService } from 'src/tokens/jwt/jwt.service';
-import { UserDto } from 'src/users/dto';
+import { JWTService } from 'src/domain/tokens/jwt/jwt.service';
+import { UserDto } from 'src/domain/tokens/jwt/node_modules/src/domain/auth/guards/node_modules/src/users/dto';
 import { AppModule } from './../src/app.module';
 
 describe('AppController (e2e)', () => {

@@ -2,11 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PasswordHasherModule } from './password-hasher/password-hasher.module';
 import { PredefinedConfigModule } from './predefined/modules/config.module';
 import { MockedUsersModule } from './__mocks__/modules/users.module.mock';
 import { MockedAuthModule } from './__mocks__/modules/auth.module.mock';
-import { TokensModule } from './tokens/tokens.module';
+import { TokensModule } from './domain/tokens/tokens.module';
 
 describe('AppController', () => {
     let appController: AppController;
@@ -16,7 +15,6 @@ describe('AppController', () => {
             imports: [
                 MockedUsersModule,
                 MockedAuthModule,
-                PasswordHasherModule,
                 PredefinedConfigModule,
                 TokensModule,
             ],

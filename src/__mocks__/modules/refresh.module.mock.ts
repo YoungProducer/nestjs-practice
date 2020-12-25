@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { RefreshTokenEntity } from 'src/entities/refresh-token.entity';
-import { UserEntity } from 'src/entities/user.entity';
-import { RefreshService } from 'src/tokens/refresh/refresh.service';
+import { RefreshTokenEntity } from 'src/domain/tokens/entities/refresh-token.entity';
+import { UserEntity } from 'src/domain/users/entities/user.entity';
+import { RefreshService } from 'src/domain/tokens/refresh/refresh.service';
 
 @Module({
     providers: [

@@ -1,29 +1,48 @@
+import * as path from 'path';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { MailerModule } from '@nestjs-modules/mailer';
 
-import { getTypeOrmOptions } from 'src/utils';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
-import { ConfigService } from './config/config.service';
-import { PasswordHasherModule } from './password-hasher/password-hasher.module';
-import { TokensModule } from './tokens/tokens.module';
-import { PredefinedConfigModule } from './predefined/modules/config.module';
-import { PredefinedMailerModule } from './predefined/modules/mailer.module';
+import { UsersModule } from './domain/users/users.module';
+import { AuthModule } from './domain/auth/auth.module';
+import { TokensModule } from './domain/tokens/tokens.module';
+import { DI_CONFIG } from './config/constants';
+import { EnvConfig } from './config/interfaces';
+import { PredefinedConfigModule } from './config/config.module';
+import { DataBaseModule } from './infrastructure/database/database.module';
 
 @Module({
     imports: [
         UsersModule,
         AuthModule,
-        PasswordHasherModule,
         PredefinedConfigModule,
-        PredefinedMailerModule,
         TokensModule,
-        TypeOrmModule.forRootAsync({
+        DataBaseModule,
+        MailerModule.forRootAsync({
             imports: [PredefinedConfigModule],
-            useFactory: getTypeOrmOptions,
-            inject: [ConfigService],
+            useFactory: (config: EnvConfig) => ({
+                transport: {
+                    host: config.SMTP_HOST,
+                    port: +config.SMTP_PASS,
+                    auth: {
+                        user: config.SMTP_USER,
+                        pass: config.SMTP_PASS,
+                    },
+                },
+                defaults: {
+                    from: 'noreply@gmail.com',
+                },
+                template: {
+                    dir: path.join(__dirname, 'templates'),
+                    adapter: new HandlebarsAdapter(),
+                    options: {
+                        strict: true,
+                    },
+                },
+            }),
+            inject: [DI_CONFIG],
         }),
     ],
     controllers: [AppController],
