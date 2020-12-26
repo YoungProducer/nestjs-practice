@@ -5,7 +5,12 @@ import { EnvConfig } from 'src/config/interfaces';
 
 export const getTypeOrmOptions = (config: EnvConfig): TypeOrmModuleOptions => {
     const entitiesNames = '*.entity{.ts,.js}';
-    const entitiesPath = path.resolve(__dirname, '..', '**', entitiesNames);
+    const entitiesPath = path.resolve(
+        __dirname,
+        '../../../',
+        '**',
+        entitiesNames,
+    );
 
     return {
         type: config.DB_TYPE as any,
