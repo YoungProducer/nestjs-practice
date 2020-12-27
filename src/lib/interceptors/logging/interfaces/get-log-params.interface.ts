@@ -7,4 +7,5 @@ export interface GetLogParams {
      * @default false
      */
     error?: boolean;
+    noCloseWrap?: boolean;
 }

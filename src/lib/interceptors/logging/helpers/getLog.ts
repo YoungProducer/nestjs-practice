@@ -4,21 +4,26 @@ import * as moment from 'moment';
 
 import { GetLogParams } from '../interfaces';
 
+export const logName = (name: string): string => chalk.green(name);
+export const logValue = (...value: any): string => chalk.yellow(value);
+
+export const startWrap = chalk.magenta('#################################');
+export const closeWrap = `${startWrap}\n`;
+
 export const getLog = ({
     start,
     executionTime,
     statusCode,
     curlString,
     error,
+    noCloseWrap,
 }: GetLogParams): string => `
-${chalk.magenta('#################################')}
-${chalk.green('Request id:')} ${chalk.yellow(randomStringGenerator())}
-${chalk.green('Request time:')} ${moment(new Date(start)).format(
+${startWrap}
+${logName('Request id:')} ${logValue(randomStringGenerator())}
+${logName('Request time:')} ${moment(new Date(start)).format(
     'MM/DD/YYYY, HH:mm:ss A',
 )}
-${chalk.green('Execution time:')} ${chalk.yellow(executionTime, 'ms')}
-${chalk.green('Response status:')} ${chalk[error ? 'red' : 'yellow'](
-    statusCode,
-)}
-${chalk.green('Curl:')} ${chalk.yellow(curlString)}
-${chalk.magenta('#################################')}\n`;
+${logName('Execution time:')} ${logValue(executionTime, 'ms')}
+${logName('Response status:')} ${chalk[error ? 'red' : 'yellow'](statusCode)}
+${logName('Curl:')} ${logValue(curlString)}
+${!noCloseWrap ? `${closeWrap}` : ''}`;

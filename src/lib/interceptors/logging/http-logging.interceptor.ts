@@ -9,7 +9,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 import { fetchToCurl } from 'src/lib/request-to-curl';
-import { validateError, getLog } from './helpers';
+import { validateError, getLog, logName, closeWrap } from './helpers';
 
 @Injectable()
 export class HttpLoggingInterceptor implements NestInterceptor {
@@ -51,9 +51,12 @@ export class HttpLoggingInterceptor implements NestInterceptor {
                                 executionTime: Date.now() - now,
                                 statusCode: err.status || 500,
                                 curlString,
+                                noCloseWrap: true,
                             }),
                         ),
+                        error(logName('Trace: ')),
                         validateError(err) ? console.log(err) : undefined,
+                        error(closeWrap),
                     ),
             ),
         );
