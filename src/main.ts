@@ -7,6 +7,7 @@ import { HttpLoggingInterceptor } from './lib/interceptors/logging/http-logging.
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule, {
+        logger: ['log', 'debug', 'verbose', 'warn'],
         cors: {
             origin: '*',
             methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',

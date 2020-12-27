@@ -5,7 +5,7 @@ import {
     CallHandler,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
-import { Observable, of } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 import { fetchToCurl } from 'src/lib/request-to-curl';
@@ -42,22 +42,23 @@ export class HttpLoggingInterceptor implements NestInterceptor {
                 ),
             ),
             catchError(
-                (err: any): Observable<boolean | void> =>
-                    of(
-                        error(
-                            getLog({
-                                error: true,
-                                start: now,
-                                executionTime: Date.now() - now,
-                                statusCode: err.status || 500,
-                                curlString,
-                                noCloseWrap: true,
-                            }),
-                        ),
-                        error(logName('Trace: ')),
-                        validateError(err) ? console.log(err) : undefined,
-                        error(closeWrap),
-                    ),
+                (err: any): Observable<boolean | void> => {
+                    error(
+                        getLog({
+                            error: true,
+                            start: now,
+                            executionTime: Date.now() - now,
+                            statusCode: err.status || 500,
+                            curlString,
+                            noCloseWrap: true,
+                        }),
+                    );
+                    error(logName('Trace: '));
+                    validateError(err) ? console.log(err) : undefined;
+                    error(closeWrap);
+
+                    return throwError(err);
+                },
             ),
         );
     }
