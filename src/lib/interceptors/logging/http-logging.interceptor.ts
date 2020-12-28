@@ -43,6 +43,8 @@ export class HttpLoggingInterceptor implements NestInterceptor {
             ),
             catchError(
                 (err: any): Observable<boolean | void> => {
+                    const isInternalError = validateError(err);
+
                     error(
                         getLog({
                             error: true,
@@ -53,8 +55,8 @@ export class HttpLoggingInterceptor implements NestInterceptor {
                             noCloseWrap: true,
                         }),
                     );
-                    error(logName('Trace: '));
-                    validateError(err) ? console.log(err) : undefined;
+                    isInternalError && error(logName('Trace: '));
+                    isInternalError && console.log(err);
                     error(closeWrap);
 
                     return throwError(err);
