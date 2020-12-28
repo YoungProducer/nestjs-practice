@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 
 import { RefreshPayloadDto, RefreshResponseDto } from './dto';
@@ -9,6 +9,7 @@ export class TokensController {
     constructor(private tokensService: TokensService) {}
 
     @Post('/refresh')
+    @HttpCode(200)
     async refresh(
         @Body() refreshPayloadDto: RefreshPayloadDto,
     ): Promise<RefreshResponseDto> {

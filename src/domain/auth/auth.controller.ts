@@ -4,7 +4,12 @@ import { classToPlain, plainToClass } from 'class-transformer';
 import { TokensService } from 'src/domain/tokens/tokens.service';
 import { UserDto } from 'src/domain/users/dto';
 import { AuthService } from './auth.service';
-import { SignUpDto, SignInDto, LoginResponseDto } from './dto';
+import {
+    SignUpDto,
+    SignInDto,
+    SignInResponseDto,
+    SignUpResponseDto,
+} from './dto';
 
 @Controller('auth')
 export class AuthController {
@@ -14,13 +19,16 @@ export class AuthController {
     ) {}
 
     @Post('/signup')
-    async signup(@Body() signUpDto: SignUpDto): Promise<void> {
-        await this.authService.signUp(signUpDto);
+    @HttpCode(200)
+    async signup(@Body() signUpDto: SignUpDto): Promise<SignUpResponseDto> {
+        const user = await this.authService.signUp(signUpDto);
+
+        return plainToClass(SignUpResponseDto, { user });
     }
 
     @Post('/signin')
     @HttpCode(200)
-    async signin(@Body() signInDto: SignInDto): Promise<LoginResponseDto> {
+    async signin(@Body() signInDto: SignInDto): Promise<SignInResponseDto> {
         const user = await this.authService.verifyCredentials(signInDto);
 
         const [
@@ -30,12 +38,12 @@ export class AuthController {
             classToPlain(user) as UserDto,
         );
 
-        const preparedResponse: LoginResponseDto = {
+        const preparedResponse: SignInResponseDto = {
             user,
             accessToken,
             refreshToken,
         };
 
-        return plainToClass(LoginResponseDto, preparedResponse);
+        return plainToClass(SignInResponseDto, preparedResponse);
     }
 }
