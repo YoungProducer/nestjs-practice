@@ -25,7 +25,10 @@ export class UsersService {
 
     async create(user: CreateUserData): Promise<UserEntity> {
         const newUser = this.usersRepository.create({
-            ...user,
+            email: user.email,
+            name: user.name,
+            salt: user.salt,
+            hash: user.hash,
         });
 
         await this.usersRepository.save(newUser);

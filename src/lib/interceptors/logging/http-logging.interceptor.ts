@@ -56,6 +56,10 @@ export class HttpLoggingInterceptor implements NestInterceptor {
                         }),
                     );
                     isInternalError && error(logName('Trace: '));
+                    /**
+                     * Trace в stdout не выводится, он хочет стринг, а ошибка явно не стринг,
+                     * возможно там есть какие-то хаки, но я про них не знаю
+                     */
                     isInternalError && console.log(err);
                     error(closeWrap);
 
