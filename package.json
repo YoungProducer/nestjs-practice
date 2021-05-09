@@ -35,7 +35,7 @@
     "dotenv": "^8.2.0",
     "fetch-to-curl": "^0.5.0",
     "format-curl": "^2.2.1",
-    "handlebars": "^4.7.6",
+    "handlebars": "^4.7.7",
     "http-to-curl": "^1.4.3",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
