@@ -37,7 +37,7 @@
     "format-curl": "^2.2.1",
     "handlebars": "^4.7.6",
     "http-to-curl": "^1.4.3",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "moment": "^2.29.1",
     "mysql": "^2.18.1",
     "nodemailer": "^6.4.17",
